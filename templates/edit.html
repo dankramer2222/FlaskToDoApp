@@ -2,12 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Edit ToDo</title>
 </head>
 <body>
-      <form action="{{url_for('edit',index=index)}}" method ="post">
-          <input type="text" name = "todo" value="{{todo['task'] }}">
-          <button type = "submit">Save</button>
-      </form>
+    <form action="{{url_for('edit', index=index)}}" method="post">
+        <input type="text" name="todo" value="{{todo['task'] }}">
+        <input type="datetime-local" name="due_date" value="{{ todo['due_date'].strftime('%Y-%m-%dT%H:%M') }}"> <!-- Добавляем поле для редактирования даты и времени -->
+        <button type="submit">Save</button>
+    </form>
 </body>
 </html>

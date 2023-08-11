@@ -3,23 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <title>NeuralNine ToDo app</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js"></script>
 </head>
 <body>
-<h1>ToDos</h1>
-<ul>
-    {% for todo in todos %}
-    <li>
-        <input type="checkbox" name="done" {% if todo['done'] %}checked{% endif %}disabled onchange="this.form.submit()">
-        <span {% if todo['done'] %}style="text-decoration: line-through"{% endif %}>{{ todo['task'] }}</span>
-        <a href="{{ url_for('check', index=loop.index0) }}">Check</a>
-        <a href="{{ url_for('edit', index=loop.index0) }}">Edit</a>
-        <a href="{{ url_for('delete', index=loop.index0) }}">Delete</a>
-    </li>
-    {% endfor %}
-</ul>
-<form action="{{ url_for('add') }}" method="post">
-    <input type="text" name="todo">
-    <button type="submit">Add ToDo</button>
-</form>
+    <h1>ToDos</h1>
+    <ul>
+        {% for todo in todos %}
+        <li>
+            <input type="checkbox" name="done" {% if todo['done'] %}checked{% endif %} disabled onchange="this.form.submit()">
+            <span {% if todo['done'] %}style="text-decoration: line-through"{% endif %}>{{ todo['task'] }}</span>
+            <span>{% if todo['due_date'] %}{{ todo['due_date'].strftime('%Y-%m-%d %H:%M') }}{% else %}No due date{% endif %}</span> <!-- Отображение даты выполнения -->
+            <a href="{{ url_for('check', index=loop.index0) }}">Check</a>
+            <a href="{{ url_for('edit', index=loop.index0) }}">Edit</a>
+            <a href="{{ url_for('delete', index=loop.index0) }}">Delete</a>
+        </li>
+        {% endfor %}
+    </ul>
+    <form action="{{ url_for('add') }}" method="post">
+        <input type="text" name="todo" placeholder="Задание">
+        <input type="datetime-local" name="due_date" placeholder="Дата выполнения">
+        <button type="submit">Добавить задание</button>
+    </form>
+    <div id="calendar"></div>
+    <button id="showEventsButton">Даты</button>
+    <div id="eventsModal" style="display: none;">
+        <h2>Даты выполнения</h2>
+        <div id="eventsList"></div>
+    </div>
+    <script src="{{ url_for('static', filename='calendar.js') }}"></script>
 </body>
 </html>
